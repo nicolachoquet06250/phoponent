@@ -3,8 +3,15 @@
 class xphp_tag {
 	protected $attributs = [];
 	protected $value = '';
+	private $models = [];
+    private $views = [];
 
-	public function attribute($name=null, $value=null) {
+    public function __construct($models, $views) {
+        $this->models = $models;
+        $this->views = $views;
+    }
+
+    public function attribute($name=null, $value=null) {
 		if(is_null($value)) {
 			if(is_null($name)) {
 				return $this->attributs;
@@ -44,4 +51,20 @@ class xphp_tag {
 	public function get_class() {
 		return __CLASS__;
 	}
+
+	protected function get_models() {
+	    return array_keys($this->models);
+    }
+
+    public function get_model($name) {
+        return isset($this->models[$name]) ? $this->models[$name] : null;
+    }
+
+    public function get_views() {
+	    return array_keys($this->views);
+    }
+
+    public function get_view($name) {
+        return isset($this->views[$name]) ? $this->views[$name] : null;
+    }
 }

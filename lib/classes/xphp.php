@@ -1,20 +1,52 @@
 <?php
 
 class xphp {
-	public static function parse($path) {
-		if(strstr($path, 0, 1) === '/') {
-			$path = 'src'.$path;
-		}
-		elseif (strstr($path, 0, 1) !== '/') {
-			$path = 'src/'.$path;
-		}
+    use static_class;
 
-		if(!strstr($path, '.') && substr($path, strlen($path)-1, 1) !== '/') {
-			$path .= '/index.html';
-		}
-		elseif (!strstr($path, '.') && substr($path, strlen($path)-1, 1) === '/') {
-			$path .= 'index.html';
-		}
+    public static function get_models($component) {
+        $models = [];
+        $dir = opendir("components/{$component}/models");
+        while (($file = readdir($dir)) !== false) {
+            if($file !== '.' && $file !== '..') {
+                if(is_file("components/{$component}/models/{$file}")) {
+                    require_once "components/{$component}/models/{$file}";
+                    $model = str_replace('.php', '', $file);
+                    $models[$model] = new $model();
+                }
+            }
+        }
+        return $models;
+    }
+
+    public static function get_views($component) {
+        $views = [];
+        $dir = opendir("components/{$component}/views");
+        while (($file = readdir($dir)) !== false) {
+            if($file !== '.' && $file !== '..') {
+                if(is_file("components/{$component}/views/{$file}")) {
+                    require_once "components/{$component}/views/{$file}";
+                    $view = str_replace('.view.php', '', $file);
+                    $views[$view] = new $view("components/{$component}/views");
+                }
+            }
+        }
+        return $views;
+    }
+
+	public static function parse($path) {
+        if(substr($path, 0, 11) !== '/components' && substr($path, 0, 11) !== 'components/') {
+            if (strstr($path, 0, 1) === '/') {
+                $path = 'src' . $path;
+            } elseif (strstr($path, 0, 1) !== '/') {
+                $path = 'src/' . $path;
+            }
+
+            if (!strstr($path, '.') && substr($path, strlen($path) - 1, 1) !== '/') {
+                $path .= '/index.html';
+            } elseif (!strstr($path, '.') && substr($path, strlen($path) - 1, 1) === '/') {
+                $path .= 'index.html';
+            }
+        }
 
 		if(is_file($path)) {
 			$file_content = file_get_contents($path);
@@ -27,7 +59,7 @@ class xphp {
 					/**
 					 * @var xphp_tag $tag
 					 */
-					$tag = new $class();
+					$tag = new $class(self::get_models($class), self::get_views($class));
 					$tag->value($matches[2]);
 					$file_content = str_replace($matches[0], $tag->render(), $file_content);
 				}
@@ -40,7 +72,7 @@ class xphp {
 					/**
 					 * @var xphp_tag $tag
 					 */
-					$tag = new $class();
+					$tag = new $class(self::get_models($class), self::get_views($class));
 					$tag->value($matches[2]);
 					$file_content = str_replace($matches[0], $tag->render(), $file_content);
 				}
@@ -55,7 +87,7 @@ class xphp {
 					/**
 					 * @var xphp_tag $tag
 					 */
-					$tag = new $class();
+					$tag = new $class(self::get_models($class), self::get_views($class));
 					foreach ($arguments as $argument) {
 						$argument = explode('=', $argument);
 						if($argument[0] !== '') {
@@ -80,7 +112,7 @@ class xphp {
 					/**
 					 * @var xphp_tag $tag
 					 */
-					$tag = new $class();
+					$tag = new $class(self::get_models($class), self::get_views($class));
 					$file_content = str_replace($matches[0], $tag->render(), $file_content);
 				}
 			}, $file_content);
@@ -92,7 +124,7 @@ class xphp {
 					/**
 					 * @var xphp_tag $tag
 					 */
-					$tag = new $class();
+					$tag = new $class(self::get_models($class), self::get_views($class));
 					$file_content = str_replace($matches[0], $tag->render(), $file_content);
 				}
 			}, $file_content);
@@ -106,7 +138,7 @@ class xphp {
 					/**
 					 * @var xphp_tag $tag
 					 */
-					$tag = new $class();
+					$tag = new $class(self::get_models($class), self::get_views($class));
 					foreach ($arguments as $argument) {
 						$argument = explode('=', $argument);
 						if($argument[0] !== '') {
@@ -130,7 +162,7 @@ class xphp {
 					/**
 					 * @var xphp_tag $tag
 					 */
-					$tag = new $class();
+					$tag = new $class(self::get_models($class), self::get_views($class));
 					$file_content = str_replace($matches[0], $tag->render(), $file_content);
 				}
 			}, $file_content);
@@ -142,7 +174,7 @@ class xphp {
 					/**
 					 * @var xphp_tag $tag
 					 */
-					$tag = new $class();
+					$tag = new $class(self::get_models($class), self::get_views($class));
 					$file_content = str_replace($matches[0], $tag->render(), $file_content);
 				}
 			}, $file_content);
@@ -156,7 +188,7 @@ class xphp {
 					/**
 					 * @var xphp_tag $tag
 					 */
-					$tag = new $class();
+					$tag = new $class(self::get_models($class), self::get_views($class));
 					foreach ($arguments as $argument) {
 						$argument = explode('=', $argument);
 						if($argument[0] !== '') {

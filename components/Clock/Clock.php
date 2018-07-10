@@ -2,6 +2,8 @@
 
 class Clock extends xphp_tag {
 	public function render(): string {
-		return '<div>Nous sommes le '.date('d/m/Y').' et il est '.date('H:i').'</div>';
+	    $this->get_model('first_model')->echo_toto();
+	    $result = $this->get_view('horloge')->render();
+		return $result;
 	}
 }

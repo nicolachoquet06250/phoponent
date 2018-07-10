@@ -1,0 +1,39 @@
+<script>
+    $(window).ready(() => {
+        setInterval(function() {
+            var $clock = $('.clock');
+            var heures = (new Date()).getHours();
+            var minutes = (new Date()).getMinutes();
+            var secondes = (new Date()).getSeconds();
+            if(heures < 10) {
+                heures = '0' + heures;
+            }
+            if(minutes < 10) {
+                minutes = '0' + minutes;
+            }
+            if(secondes < 10) {
+                secondes = '0' + secondes;
+            }
+
+            if($('.clock .secondes') !== undefined) {
+                if($('.clock .secondes').css('display') === 'inline-block') {
+                    var heure = heures + ':' + minutes + '<span class=\'secondes\' style=\'display:inline-block;\'>:' + secondes + '</span>';
+                    var btn_value = 'Cacher les secondes';
+                }
+                else {
+                    var heure = heures + ':' + minutes + '<span class=\'secondes\' style=\'display:none;\'>:' + secondes + '</span>';
+                    var btn_value = 'Afficher les secondes';
+                }
+            }
+
+            var button = '<br /><button onclick="if( $($(\'.clock .secondes\')[0]).css(\'display\') === \'none\' ) { $(\'.clock .secondes\').css(\'display\', \'inline-block\'); $(this).html(\'Cacher les secondes\') } else { $(\'.clock .secondes\').css(\'display\', \'none\'); $(this).html(\'Afficher les secondes\') }" > ' + btn_value + ' </button>';
+
+            $clock.html(heure + button);
+        }, 1000);
+    });
+</script>
+<div>
+    Nous sommes le @date@ et il est <span class="clock">@heure@</span>
+</div>
+<Mon-premier-tag class="mon-premier-tag" value="test%20avec%20quelques%20mots"/>
+<br/>

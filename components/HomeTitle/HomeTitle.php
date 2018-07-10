@@ -2,7 +2,9 @@
 
 class HomeTitle extends xphp_tag {
 	public function render(): string {
-		$title = is_null($this->attribute('title')) ? 'Accueil' : $this->attribute('title');
-		return "<title>{$title}</title>";
+        $title = $this->get_model('Title')->get_title($this->attribute('title'));
+		return $this->get_view('HomeTitle_view')->set_vars([
+		    'title' => $title,
+        ])->render();
 	}
 }
