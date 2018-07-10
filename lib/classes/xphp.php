@@ -42,14 +42,17 @@ class xphp {
             }
 
             if (!strstr($path, '.') && substr($path, strlen($path) - 1, 1) !== '/') {
-                $path .= '/index.html';
+                $path .= '/index.php';
             } elseif (!strstr($path, '.') && substr($path, strlen($path) - 1, 1) === '/') {
-                $path .= 'index.html';
+                $path .= 'index.php';
             }
         }
 
 		if(is_file($path)) {
-			$file_content = file_get_contents($path);
+            $file_content = file_get_contents($path);
+		    if(explode('.', $path)[count(explode('.', $path))-1] === 'php') {
+		        $file_content = include $path;
+            }
 			// balise banales avec contenu
 			// sans attributs
 			preg_replace_callback(regexp::get_regexp_for_no_autoclosed_tags_with_content_and_not_arguments(), function ($matches) use (&$file_content) {
