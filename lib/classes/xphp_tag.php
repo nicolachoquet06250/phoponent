@@ -64,6 +64,10 @@ class xphp_tag {
 	    return array_keys($this->views);
     }
 
+    /**
+     * @param $name
+     * @return view
+     */
     public function get_view($name) {
         return isset($this->views[$name]) ? $this->views[$name] : null;
     }
