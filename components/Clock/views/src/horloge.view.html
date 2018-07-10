@@ -1,6 +1,6 @@
 <script>
     $(window).ready(() => {
-        setInterval(function() {
+        function affiche_horloge() {
             var $clock = $('.clock');
             var heures = (new Date()).getHours();
             var minutes = (new Date()).getMinutes();
@@ -16,24 +16,29 @@
             }
 
             if($('.clock .secondes') !== undefined) {
+                var heure = '';
+                var btn_value = '';
                 if($('.clock .secondes').css('display') === 'inline-block') {
-                    var heure = heures + ':' + minutes + '<span class=\'secondes\' style=\'display:inline-block;\'>:' + secondes + '</span>';
-                    var btn_value = 'Cacher les secondes';
+                    heure = heures + ':' + minutes + '<span class=\'secondes\' style=\'display:inline-block;\'>:' + secondes + '</span>';
+                    btn_value = 'Cacher les secondes';
                 }
                 else {
-                    var heure = heures + ':' + minutes + '<span class=\'secondes\' style=\'display:none;\'>:' + secondes + '</span>';
-                    var btn_value = 'Afficher les secondes';
+                    heure = heures + ':' + minutes + '<span class=\'secondes\' style=\'display:none;\'>:' + secondes + '</span>';
+                    btn_value = 'Afficher les secondes';
                 }
             }
 
             var button = '<br /><button onclick="if( $($(\'.clock .secondes\')[0]).css(\'display\') === \'none\' ) { $(\'.clock .secondes\').css(\'display\', \'inline-block\'); $(this).html(\'Cacher les secondes\') } else { $(\'.clock .secondes\').css(\'display\', \'none\'); $(this).html(\'Afficher les secondes\') }" > ' + btn_value + ' </button>';
 
             $clock.html(heure + button);
-        }, 1000);
+        }
+
+        affiche_horloge();
+        setInterval(affiche_horloge, 1000);
     });
 </script>
 <div>
-    Nous sommes le @date@ et il est <span class="clock">@heure@</span>
+    Nous sommes le @date@ et il est <b class="clock">@heure@</b>
 </div>
 <Mon-premier-tag class="mon-premier-tag" value="test%20avec%20quelques%20mots"/>
 <br/>
