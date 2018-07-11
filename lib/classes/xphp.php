@@ -11,7 +11,7 @@ class xphp {
                 if(is_file("components/{$component}/models/{$file}")) {
                     require_once "components/{$component}/models/{$file}";
                     $model = str_replace('.php', '', $file);
-                    $models[$model] = new $model(self::get_services());
+                    $models[$model] = new $model(self::get_services(), $component);
                 }
             }
         }

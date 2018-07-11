@@ -1,5 +1,10 @@
 <?php
     class Table extends xphp_tag {
+
+    	public static function test() {
+    		echo 'toto';
+		}
+
     	private function get_table_lines($json_datas) {
 			$lines = '';
 			foreach ($json_datas as $json_data) {
