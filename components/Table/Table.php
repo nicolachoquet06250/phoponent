@@ -14,7 +14,6 @@
 						 	'header' => $header_view,
 							'lines' => $lines
 						])->render();
-            var_dump($json_datas);
             return $view;
         }
     }
