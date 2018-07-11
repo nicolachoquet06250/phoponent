@@ -38,7 +38,7 @@ class regexp {
     }
 
     private static function get_regexp_for_attributs():string {
-	    return '\ ([\ a-zA-Z0-9\=\-\_\\\'\"\%\é\&\;\,\:\/\!\§\*ù\$\^\#\{\}\[\]\(\)\+\\n\\t]+)';
+	    return '\ ([\ a-zA-Z0-9\=\-\_\\\'\"\%\é\&\;\,\:\/\.\!\§\*ù\$\^\#\{\}\[\]\(\)\+\\n\\t]+)';
     }
 
     private static function get_regexp_for_juste_space():string {

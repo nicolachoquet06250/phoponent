@@ -5,10 +5,12 @@ class xphp_tag {
 	protected $value = '';
 	private $models = [];
     private $views = [];
+    private $services = [];
 
-    public function __construct($models, $views) {
+    public function __construct($models, $views, $services) {
         $this->models = $models;
         $this->views = $views;
+        $this->services = $services;
     }
 
     public function attribute($name=null, $value=null) {
@@ -56,6 +58,10 @@ class xphp_tag {
 	    return array_keys($this->models);
     }
 
+	/**
+	 * @param $name
+	 * @return model
+	 */
     public function get_model($name) {
         return isset($this->models[$name]) ? $this->models[$name] : null;
     }
@@ -71,4 +77,12 @@ class xphp_tag {
     public function get_view($name) {
         return isset($this->views[$name]) ? $this->views[$name] : null;
     }
+
+	public function get_services() {
+		return array_keys($this->services);
+	}
+
+	public function get_service($name) {
+		return isset($this->services[$name]) ? $this->services[$name] : null;
+	}
 }
