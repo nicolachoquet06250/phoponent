@@ -6,11 +6,14 @@ class xphp_tag {
 	private $models = [];
     private $views = [];
     private $services = [];
+    private $styles = [];
+    protected $template = '';
 
-    public function __construct($models, $views, $services) {
+    public function __construct($models, $views, $services, &$template) {
         $this->models = $models;
         $this->views = $views;
         $this->services = $services;
+        $this->template = $template;
     }
 
     public function attribute($name=null, $value=null) {
@@ -30,6 +33,19 @@ class xphp_tag {
 		$value = str_replace('%20', ' ', $value);
 		$this->attributs[$name] = $value;
 		return $this;
+	}
+
+	protected function set_style($selector, $styles) {
+    	$this->styles[$selector] = $styles;
+	}
+
+	protected function get_style() {
+    	return $this->styles;
+	}
+
+	protected function add_style_to_page() {
+    	//TODO incruster le style du composant dans le template de base
+    	return $this->template;
 	}
 
 	public function value($value = null) {

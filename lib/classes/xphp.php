@@ -83,7 +83,7 @@ class xphp {
 					/**
 					 * @var xphp_tag $tag
 					 */
-					$tag = new $class(self::get_models($class), self::get_views($class), self::get_services());
+					$tag = new $class(self::get_models($class), self::get_views($class), self::get_services(), $file_content);
 					$tag->value($matches[2]);
 					$file_content = str_replace($matches[0], $tag->render(), $file_content);
 				}
@@ -96,7 +96,7 @@ class xphp {
 					/**
 					 * @var xphp_tag $tag
 					 */
-					$tag = new $class(self::get_models($class), self::get_views($class), self::get_services());
+					$tag = new $class(self::get_models($class), self::get_views($class), self::get_services(), $file_content);
 					$tag->value($matches[2]);
 					$file_content = str_replace($matches[0], $tag->render(), $file_content);
 				}
@@ -111,7 +111,7 @@ class xphp {
 					/**
 					 * @var xphp_tag $tag
 					 */
-					$tag = new $class(self::get_models($class), self::get_views($class), self::get_services());
+					$tag = new $class(self::get_models($class), self::get_views($class), self::get_services(), $file_content);
 					foreach ($arguments as $argument) {
 						$argument = explode('=', $argument);
 						if($argument[0] !== '') {
@@ -136,7 +136,7 @@ class xphp {
 					/**
 					 * @var xphp_tag $tag
 					 */
-					$tag = new $class(self::get_models($class), self::get_views($class), self::get_services());
+					$tag = new $class(self::get_models($class), self::get_views($class), self::get_services(), $file_content);
 					$file_content = str_replace($matches[0], $tag->render(), $file_content);
 				}
 			}, $file_content);
@@ -148,7 +148,7 @@ class xphp {
 					/**
 					 * @var xphp_tag $tag
 					 */
-					$tag = new $class(self::get_models($class), self::get_views($class), self::get_services());
+					$tag = new $class(self::get_models($class), self::get_views($class), self::get_services(), $file_content);
 					$file_content = str_replace($matches[0], $tag->render(), $file_content);
 				}
 			}, $file_content);
@@ -162,7 +162,7 @@ class xphp {
 					/**
 					 * @var xphp_tag $tag
 					 */
-					$tag = new $class(self::get_models($class), self::get_views($class), self::get_services());
+					$tag = new $class(self::get_models($class), self::get_views($class), self::get_services(), $file_content);
 					foreach ($arguments as $argument) {
 						$argument = explode('=', $argument);
 						if($argument[0] !== '') {
@@ -186,7 +186,7 @@ class xphp {
 					/**
 					 * @var xphp_tag $tag
 					 */
-					$tag = new $class(self::get_models($class), self::get_views($class), self::get_services());
+					$tag = new $class(self::get_models($class), self::get_views($class), self::get_services(), $file_content);
 					$file_content = str_replace($matches[0], $tag->render(), $file_content);
 				}
 			}, $file_content);
@@ -198,7 +198,7 @@ class xphp {
 					/**
 					 * @var xphp_tag $tag
 					 */
-					$tag = new $class(self::get_models($class), self::get_views($class), self::get_services());
+					$tag = new $class(self::get_models($class), self::get_views($class), self::get_services(), $file_content);
 					$file_content = str_replace($matches[0], $tag->render(), $file_content);
 				}
 			}, $file_content);
@@ -212,7 +212,7 @@ class xphp {
 					/**
 					 * @var xphp_tag $tag
 					 */
-					$tag = new $class(self::get_models($class), self::get_views($class), self::get_services());
+					$tag = new $class(self::get_models($class), self::get_views($class), self::get_services(), $file_content);
 					foreach ($arguments as $argument) {
 						$argument = explode('=', $argument);
 						if($argument[0] !== '') {
