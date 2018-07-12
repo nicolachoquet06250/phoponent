@@ -21,12 +21,17 @@ trait view {
 
     public function before_render() {}
 
+	protected function render_end(&$template) {
+		xphp::parse_template_content($template);
+	}
+
     public function render():string {
         $this->before_render();
         $template = $this->get_template();
         foreach ($this->vars as $var => $value) {
             $template = str_replace("@{$var}@", $value, $template);
         }
+        $this->render_end($template);
         return $template;
     }
 }
