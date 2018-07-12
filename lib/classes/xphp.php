@@ -112,26 +112,44 @@ class xphp {
 		preg_replace_callback(regexp::get_regexp_for_no_autoclosed_tags_with_content_and_arguments(), function ($matches) use (&$template) {
 			$class = str_replace('-', '_', $matches[1]);
 			$arguments = str_replace(["\n", "\t"], '', $matches[2]);
-			$arguments = explode(' ', $arguments);
-			if(is_file("components/{$class}/{$class}.php")) {
-				require_once "components/{$class}/{$class}.php";
-				/**
-				 * @var xphp_tag $tag
-				 */
-				$tag = new $class(self::get_models($class), self::get_views($class), self::get_services(), $template);
-				foreach ($arguments as $argument) {
-					$argument = explode('=', $argument);
-					if($argument[0] !== '') {
-						if ($argument[0] === 'value') {
-							$tag->value($argument[1]);
-						} else {
-							$tag->attribute($argument[0], $argument[1]);
-						}
-					}
-				}
-				$tag->value($matches[3]);
-				$template = str_replace($matches[0], $tag->render(), $template);
-			}
+            $arguments_array = [];
+            preg_replace_callback(regexp::regexp_for_parse_attributs(), function ($matches) use (&$arguments_array) {
+                $arguments_array[] = $matches[1];
+            }, $arguments);
+
+            preg_replace_callback(regexp::regexp_for_parse_attributs_with_only_integers(), function ($matches) use (&$arguments_array) {
+                $arguments_array[] = $matches[1];
+            }, $arguments);
+
+            foreach ($arguments_array as $id => $arg) {
+                $arg_local = explode('=', $arg);
+                $argument = $arg_local[0];
+                $valeur = str_replace('\"', 'µ', $arg_local[1]);
+                $valeur = str_replace('"', '', $valeur);
+                $valeur = str_replace('µ', '"', $valeur);
+
+                $arguments_array[$argument] = $valeur;
+                unset($arguments_array[$id]);
+            }
+
+            $arguments_array['value'] = $matches[3];
+
+            $arguments = $arguments_array;
+            if(is_file("components/{$class}/{$class}.php")) {
+                require_once "components/{$class}/{$class}.php";
+                /**
+                 * @var xphp_tag $tag
+                 */
+                $tag = new $class(self::get_models($class), self::get_views($class), self::get_services(), $template);
+                foreach ($arguments as $argument => $valeur) {
+                    if ($argument === 'value') {
+                        $tag->value($valeur);
+                    } else {
+                        $tag->attribute($argument, $valeur);
+                    }
+                }
+                $template = str_replace($matches[0], $tag->render(), $template);
+            }
 		}, $template);
 
 		// balises banales sans contenu
@@ -163,25 +181,42 @@ class xphp {
 		preg_replace_callback(regexp::get_regexp_for_no_autoclosed_tags_without_content_and_with_arguments(), function ($matches) use (&$template) {
 			$class = str_replace('-', '_', $matches[1]);
 			$arguments = str_replace(["\n", "\t"], '', $matches[2]);
-			$arguments = explode(' ', $arguments);
-			if(is_file("components/{$class}/{$class}.php")) {
-				require_once "components/{$class}/{$class}.php";
-				/**
-				 * @var xphp_tag $tag
-				 */
-				$tag = new $class(self::get_models($class), self::get_views($class), self::get_services(), $template);
-				foreach ($arguments as $argument) {
-					$argument = explode('=', $argument);
-					if($argument[0] !== '') {
-						if ($argument[0] === 'value') {
-							$tag->value($argument[1]);
-						} else {
-							$tag->attribute($argument[0], $argument[1]);
-						}
-					}
-				}
-				$template = str_replace($matches[0], $tag->render(), $template);
-			}
+            $arguments_array = [];
+            preg_replace_callback(regexp::regexp_for_parse_attributs(), function ($matches) use (&$arguments_array) {
+                $arguments_array[] = $matches[1];
+            }, $arguments);
+
+            preg_replace_callback(regexp::regexp_for_parse_attributs_with_only_integers(), function ($matches) use (&$arguments_array) {
+                $arguments_array[] = $matches[1];
+            }, $arguments);
+
+            foreach ($arguments_array as $id => $arg) {
+                $arg_local = explode('=', $arg);
+                $argument = $arg_local[0];
+                $valeur = str_replace('\"', 'µ', $arg_local[1]);
+                $valeur = str_replace('"', '', $valeur);
+                $valeur = str_replace('µ', '"', $valeur);
+
+                $arguments_array[$argument] = $valeur;
+                unset($arguments_array[$id]);
+            }
+
+            $arguments = $arguments_array;
+            if(is_file("components/{$class}/{$class}.php")) {
+                require_once "components/{$class}/{$class}.php";
+                /**
+                 * @var xphp_tag $tag
+                 */
+                $tag = new $class(self::get_models($class), self::get_views($class), self::get_services(), $template);
+                foreach ($arguments as $argument => $valeur) {
+                    if ($argument === 'value') {
+                        $tag->value($valeur);
+                    } else {
+                        $tag->attribute($argument, $valeur);
+                    }
+                }
+                $template = str_replace($matches[0], $tag->render(), $template);
+            }
 		}, $template);
 
 		// balises autofermantes
@@ -213,21 +248,38 @@ class xphp {
 		preg_replace_callback(regexp::get_regexp_for_autoclosed_tags_with_arguments(), function ($matches) use (&$template) {
 			$class = str_replace('-', '_', $matches[1]);
 			$arguments = str_replace(["\n", "\t"], '', $matches[2]);
-			$arguments = explode(' ', $arguments);
+            $arguments_array = [];
+            preg_replace_callback(regexp::regexp_for_parse_attributs(), function ($matches) use (&$arguments_array) {
+                $arguments_array[] = $matches[1];
+            }, $arguments);
+
+            preg_replace_callback(regexp::regexp_for_parse_attributs_with_only_integers(), function ($matches) use (&$arguments_array) {
+                $arguments_array[] = $matches[1];
+            }, $arguments);
+
+            foreach ($arguments_array as $id => $arg) {
+                $arg_local = explode('=', $arg);
+                $argument = $arg_local[0];
+                $valeur = str_replace('\"', 'µ', $arg_local[1]);
+                $valeur = str_replace('"', '', $valeur);
+                $valeur = str_replace('µ', '"', $valeur);
+
+                $arguments_array[$argument] = $valeur;
+                unset($arguments_array[$id]);
+            }
+
+            $arguments = $arguments_array;
 			if(is_file("components/{$class}/{$class}.php")) {
 				require_once "components/{$class}/{$class}.php";
 				/**
 				 * @var xphp_tag $tag
 				 */
 				$tag = new $class(self::get_models($class), self::get_views($class), self::get_services(), $template);
-				foreach ($arguments as $argument) {
-					$argument = explode('=', $argument);
-					if($argument[0] !== '') {
-						if ($argument[0] === 'value') {
-							$tag->value($argument[1]);
-						} else {
-							$tag->attribute($argument[0], $argument[1]);
-						}
+				foreach ($arguments as $argument => $valeur) {
+					if ($argument === 'value') {
+					    $tag->value($valeur);
+					} else {
+					    $tag->attribute($argument, $valeur);
 					}
 				}
 				$template = str_replace($matches[0], $tag->render(), $template);

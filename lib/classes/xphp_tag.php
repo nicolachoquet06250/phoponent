@@ -30,7 +30,6 @@ class xphp_tag {
 			$value = substr($value, 0, strlen($value)-1);
 		}
 
-		$value = str_replace('%20', ' ', $value);
 		$this->attributs[$name] = $value;
 		return $this;
 	}
@@ -57,7 +56,7 @@ class xphp_tag {
 			$value = substr($value, 1, strlen($value));
 			$value = substr($value, 0, strlen($value)-1);
 		}
-		$value = str_replace('%20', ' ', $value);
+
 		$this->value = $value;
 		return $this;
 	}

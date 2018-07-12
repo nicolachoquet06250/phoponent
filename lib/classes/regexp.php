@@ -50,4 +50,12 @@ class regexp {
 	    $end = $close ? '' : ')';
 	    return $start.'[A-Z][A-Za-z0-9\-\_]+'.$end;
     }
+
+    public static function regexp_for_parse_attributs_with_only_integers():string {
+	    return '`([\w\-]+\=\\d+)+`';
+    }
+
+    public static function regexp_for_parse_attributs():string {
+        return '`([\w\-]+\=\"[\w\ \-\/\$\']+\")+`';
+    }
 }

@@ -1,6 +1,6 @@
 <?php
-require_once 'lib/Autoload.php';
 ini_set('display_errors', 'on');
+require_once 'lib/Autoload.php';
 
 class index {
     use static_class;
@@ -10,9 +10,7 @@ class index {
 }
 
 $argv = !isset($argv)
-    ? [
-        1 => str_replace(basename(__DIR__).'/index.php', '', substr($_SERVER['REQUEST_URI'], 1, strlen($_SERVER['REQUEST_URI'])))
-    ]
+    ? [1 => $_GET['p']]
         : $argv;
 echo index::start($argv);
 
