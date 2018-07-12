@@ -1,5 +1,5 @@
 <?php
 
-class balise {
+class balise_view {
     use view;
 }

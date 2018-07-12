@@ -1,6 +1,6 @@
 <?php
 
-class props_gestion {
+class props_gestion_model {
     use model;
 
     private $id, $class, $value;

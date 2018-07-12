@@ -1,5 +1,5 @@
 <?php
-    class my_Table_view {
+    class table_view {
         use view;
 
         private $header = '';

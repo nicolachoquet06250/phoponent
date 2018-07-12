@@ -63,6 +63,7 @@ class xphp_tag {
 	 * @return model
 	 */
     public function get_model($name) {
+		$name = "{$name}_model";
         return isset($this->models[$name]) ? $this->models[$name] : null;
     }
 
@@ -75,6 +76,7 @@ class xphp_tag {
      * @return view
      */
     public function get_view($name) {
+    	$name = "{$name}_view";
         return isset($this->views[$name]) ? $this->views[$name] : null;
     }
 

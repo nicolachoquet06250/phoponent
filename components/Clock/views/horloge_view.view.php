@@ -1,6 +1,6 @@
 <?php
 
-class horloge {
+class horloge_view {
     use view;
     public function before_render() {
         $this->set_vars([
