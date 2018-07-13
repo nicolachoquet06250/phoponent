@@ -18,8 +18,3 @@ $argv = !isset($argv)
 	? [1 => $_GET['p']]
 	: $argv;
 echo index::start($argv);
-
-/*
- * TODO Faire un systeme de composants core et custom. si il y a un composant custom, prendre celui la si non prendre la version core.
- *      ( la version custom doit étendre celle du core pour ne pas avoir de perte d'informations, de propriétés undefined ou de méthodes undefined )
-*/
