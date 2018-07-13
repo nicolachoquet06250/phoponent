@@ -13,10 +13,13 @@ class help {
 	}
 
 	protected function before_run() {
-		$this->commands[] = '';
 		$this->commands[] = '-h';
 		$this->commands[] = '--help';
-		$this->commands[] = 'make:component tag=<valeur>';
+		$this->commands[] = 'make:component tag=<valeur> ?type=<core/custom>';
+		$this->commands[] = '';
+		$this->commands[] = '';
+		$this->commands[] = 'LEGENDE : ';
+		$this->commands[] = '? = optionnel';
 	}
 
 	protected function run() {

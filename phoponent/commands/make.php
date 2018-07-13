@@ -9,46 +9,60 @@ class make {
 	public function component() {
 		if(($tag = $this->argument('tag')) !== null) {
 			$tag = ucfirst($tag);
-			if(!is_dir("phoponent/app/components/{$tag}")) {
-				mkdir("phoponent/app/components/{$tag}/models", 0777, true);
-				mkdir("phoponent/app/components/{$tag}/views/src", 0777, true);
-			}
-			file_put_contents("phoponent/app/components/{$tag}/{$tag}.php", "<?php
-namespace phoponent\app\component\\".$tag.";
+			$type = $this->argument('type') ? $this->argument('type') : 'core';
 
-use phoponent\\framework\\classe\\xphp_tag;
-    class {$tag} extends xphp_tag {
+			if(!is_dir("phoponent/app/components/{$type}/{$tag}")) {
+				mkdir("phoponent/app/components/{$type}/{$tag}/models", 0777, true);
+				mkdir("phoponent/app/components/{$type}/{$tag}/views/src", 0777, true);
+			}
+			file_put_contents(
+			    "phoponent/app/components/{$type}/{$tag}/{$tag}.php",
+                "<?php
+namespace phoponent\app\component\\$type;
+
+".( $type === 'core' ? "use phoponent\\framework\\classe\\xphp_tag;" : '' )."
+    class {$tag} extends ".($type === 'custom' ? '\phoponent\app\component\core\\'.$tag : 'xphp_tag')." {
         public function render():string {
-            \$hello_world = \$this->get_model('my_{$tag}_model')->get_hello_world();
-            \$view = \$this->get_view('my_{$tag}_view')->set_vars([
+            \$hello_world = \$this->get_model('{$tag}')->get_hello_world();
+            \$view = \$this->get_view('{$tag}')->set_vars([
                 'value' => \$hello_world,
                 'class' => __CLASS__,
             ])->render();
             return \$view;
         }
-    }");
+    }"
+            );
 
-			file_put_contents("phoponent/app/components/{$tag}/views/my_{$tag}_view.view.php", "<?php
-namespace phoponent\app\component\\".$tag."\mvc\\view;
+			file_put_contents(
+			    "phoponent/app/components/{$type}/{$tag}/views/{$tag}.view.php",
+                "<?php
+namespace phoponent\app\component\\$type\\$tag\mvc\\view;
 
 use phoponent\\framework\\traits\\view;
-    class my_{$tag}_view {
+    class {$tag}".($type === 'custom' ? ' extends \phoponent\app\component\\core\\'.$tag.'\\mvc\\view\\'.$tag : '')." {
         use view;
-    }");
+    }"
+            );
 
-			file_put_contents("phoponent/app/components/{$tag}/views/src/my_{$tag}_view.view.html", "<div> @class@ </div>");
+			file_put_contents(
+			    "phoponent/app/components/{$type}/{$tag}/views/src/{$tag}.view.html",
+                "<div> @class@ </div>"
+            );
 
-			file_put_contents("phoponent/app/components/{$tag}/models/my_{$tag}_model.php", "<?php
-namespace phoponent\app\component\\".$tag."\mvc\model;
+			file_put_contents(
+			    "phoponent/app/components/{$type}/{$tag}/models/{$tag}.php",
+                "<?php
+namespace phoponent\app\component\\$type\\$tag\mvc\model;
 
 use phoponent\\framework\\traits\\model;
-    class my_{$tag}_model {
+    class {$tag}".($type === 'custom' ? ' extends \phoponent\app\component\core\\'.$tag.'\\mvc\\model\\'.$tag : '')." {
         use model;
         
         public function get_hello_world() {
             return 'Hello World';
         }
-    }");
+    }"
+            );
 		}
 	}
 }
