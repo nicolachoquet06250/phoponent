@@ -22,27 +22,36 @@ class Auto {
 		    // Framework
 
             // Traits
-			'static_class' => \phoponent\framework\traits\static_class::class,
-            'view' => \phoponent\framework\traits\view::class,
-            'model' => \phoponent\framework\traits\model::class,
-            'service' => \phoponent\framework\traits\service::class,
-            'command' => \phoponent\framework\traits\command::class,
+            'traits' => [
+                'static_class' => \phoponent\framework\traits\static_class::class,
+                'view' => \phoponent\framework\traits\view::class,
+                'model' => \phoponent\framework\traits\model::class,
+                'service' => \phoponent\framework\traits\service::class,
+                'command' => \phoponent\framework\traits\command::class,
+            ],
 
             // Classes
-            'regexp' => \phoponent\framework\static_classe\regexp::class,
-            'phoponent' => \phoponent\framework\static_classe\xphp::class,
-            'component' => \phoponent\framework\classe\xphp_tag::class,
-            'class_command' => \phoponent\framework\static_classe\command::class,
+            'classes' => [
+                'regexp' => \phoponent\framework\static_classe\regexp::class,
+                'phoponent' => \phoponent\framework\static_classe\xphp::class,
+                'component' => \phoponent\framework\classe\xphp_tag::class,
+                'class_command' => \phoponent\framework\static_classe\command::class,
+             ],
 
             // Services
-            'json_reader' => \phoponent\framework\service\json_reader::class,
-            'json_writer' => \phoponent\framework\service\json_writer::class,
-            'translation' => \phoponent\framework\service\translation::class,
+            'services' => [
+                'json_reader' => \phoponent\framework\service\json_reader::class,
+                'json_writer' => \phoponent\framework\service\json_writer::class,
+                'translation' => \phoponent\framework\service\translation::class,
+            ],
 		];
 	}
 
-	public static function dependencie($name) {
+	public static function dependencie($type, $name = null) {
 	    self::dependencies();
-	    return isset(self::$dependencies[$name]) ? self::$dependencies[$name] : null;
+	    if($name) {
+            return isset(self::$dependencies[$type][$name]) ? self::$dependencies[$type][$name] : null;
+        }
+	    return isset(self::$dependencies[$type]) ? self::$dependencies[$type] : null;
     }
 }

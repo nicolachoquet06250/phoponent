@@ -3,6 +3,7 @@ namespace phoponent\framework\classe;
 
 use phoponent\framework\traits\model;
 use phoponent\framework\traits\view;
+use phoponent\loading\Auto;
 
 class xphp_tag {
 	protected $attributs = [];
@@ -18,6 +19,10 @@ class xphp_tag {
         $this->views = $views;
         $this->services = $services;
         $this->template = $template;
+    }
+
+    public static function load_services() {
+        return Auto::dependencie('services');
     }
 
     public function attribute($name=null, $value=null) {
