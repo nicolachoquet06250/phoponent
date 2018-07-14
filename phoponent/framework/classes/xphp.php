@@ -3,6 +3,7 @@ namespace phoponent\framework\static_classe;
 
 use phoponent\framework\classe\xphp_tag;
 use phoponent\framework\traits\static_class;
+use phoponent\loading\Auto;
 
 class xphp {
     use static_class;
@@ -15,15 +16,17 @@ class xphp {
                 if(is_file("phoponent/app/components/custom/{$component}/models/{$file}")) {
                     require_once "phoponent/app/components/core/{$component}/models/{$file}";
                     require_once "phoponent/app/components/custom/{$component}/models/{$file}";
+                    $class_tag = "\phoponent\app\component\custom\{$component}";
                     $model = str_replace('.php', '', $file);
-                    $model_class = "\\phoponent\\app\\component\\custom\\{$component}\\mvc\\model\\{$model}";
-                    $models[$model] = new $model_class(self::get_services(), $component);
+                    $model_class = "\\phoponent\\app\\component\\custom\\$component\\mvc\\model\\$model";
+                    $models[$model] = new $model_class(self::get_services($class_tag), $component);
                 }
                 elseif(is_file("phoponent/app/components/core/{$component}/models/{$file}")) {
                     require_once "phoponent/app/components/core/{$component}/models/{$file}";
+                    $class_tag = "\phoponent\app\component\core\{$component}";
                     $model = str_replace('.php', '', $file);
-                    $model_class = "\\phoponent\\app\\component\\core\\{$component}\\mvc\\model\\{$model}";
-                    $models[$model] = new $model_class(self::get_services(), $component);
+                    $model_class = "\\phoponent\\app\\component\\core\\$component\\mvc\\model\\$model";
+                    $models[$model] = new $model_class(self::get_services($class_tag), $component);
                 }
             }
         }
@@ -53,18 +56,17 @@ class xphp {
         return $views;
     }
 
-    public static function get_services() {
+    public static function get_services($component) {
 		$services = [];
-		$dir = opendir("phoponent/framework/services");
-		while (($file = readdir($dir)) !== false) {
-			if($file !== '.' && $file !== '..') {
-				if(is_file("phoponent/framework/services/{$file}")) {
-					require_once "phoponent/framework/services/{$file}";
-					$service = str_replace('.php', '', $file);
-					$service_class = "\\phoponent\\framework\\service\\{$service}";
-					$services[$service] = new $service_class();
-				}
-			}
+		$component = str_replace(['{', '}'], '', $component);
+        foreach ($component::load_services() as $name => $service_to_load) {
+            if($service_to_load !== null) {
+                if (is_file($service_to_load['path'])) {
+                    Auto::dependencie('services', explode('\\', $service_to_load['class'])[count(explode('\\', $service_to_load['class'])) - 1]);
+                    $class = '\\' . $service_to_load['class'];
+                    $services[$name] = new $class();
+                }
+            }
 		}
 		return $services;
 	}
@@ -109,21 +111,21 @@ class xphp {
 			if(is_file("phoponent/app/components/custom/{$class}/{$class}.php")) {
 			    require_once "phoponent/app/components/core/{$class}/{$class}.php";
 				require_once "phoponent/app/components/custom/{$class}/{$class}.php";
-                $class_tag = "\\phoponent\\app\\component\\custom\\{$class}";
+                $class_tag = "\\phoponent\\app\\component\\custom\\$class";
 				/**
 				 * @var xphp_tag $tag
 				 */
-				$tag = new $class_tag(self::get_models($class), self::get_views($class), self::get_services(), $template);
+				$tag = new $class_tag(self::get_models($class), self::get_views($class), self::get_services($class_tag), $template);
 				$tag->value($matches[2]);
 				$template = str_replace($matches[0], $tag->render(), $template);
 			}
 			elseif(is_file("phoponent/app/components/core/{$class}/{$class}.php")) {
                 require_once "phoponent/app/components/core/{$class}/{$class}.php";
-                $class_tag = "\\phoponent\\app\\component\\core\\{$class}";
+                $class_tag = "\\phoponent\\app\\component\\core\\$class";
                 /**
                  * @var xphp_tag $tag
                  */
-                $tag = new $class_tag(self::get_models($class), self::get_views($class), self::get_services(), $template);
+                $tag = new $class_tag(self::get_models($class), self::get_views($class), self::get_services($class_tag), $template);
                 $tag->value($matches[2]);
                 $template = str_replace($matches[0], $tag->render(), $template);
             }
@@ -134,21 +136,21 @@ class xphp {
 			if(is_file("phoponent/app/components/custom/{$class}/{$class}.php")) {
 				require_once "phoponent/app/components/core/{$class}/{$class}.php";
                 require_once "phoponent/app/components/custom/{$class}/{$class}.php";
-                $class_tag = "\\phoponent\\app\\component\\custom\\{$class}";
+                $class_tag = "\\phoponent\\app\\component\\custom\\$class";
 				/**
 				 * @var xphp_tag $tag
 				 */
-				$tag = new $class_tag(self::get_models($class), self::get_views($class), self::get_services(), $template);
+				$tag = new $class_tag(self::get_models($class), self::get_views($class), self::get_services($class_tag), $template);
 				$tag->value($matches[2]);
 				$template = str_replace($matches[0], $tag->render(), $template);
 			}
 			elseif (is_file("phoponent/app/components/core/{$class}/{$class}.php")) {
                 require_once "phoponent/app/components/core/{$class}/{$class}.php";
-                $class_tag = "\\phoponent\\app\\component\\core\\{$class}";
+                $class_tag = "\\phoponent\\app\\component\\core\\$class";
                 /**
                  * @var xphp_tag $tag
                  */
-                $tag = new $class_tag(self::get_models($class), self::get_views($class), self::get_services(), $template);
+                $tag = new $class_tag(self::get_models($class), self::get_views($class), self::get_services($class_tag), $template);
                 $tag->value($matches[2]);
                 $template = str_replace($matches[0], $tag->render(), $template);
             }
@@ -181,11 +183,11 @@ class xphp {
             if(is_file("phoponent/app/components/custom/{$class}/{$class}.php")) {
                 require_once "phoponent/app/components/core/{$class}/{$class}.php";
                 require_once "phoponent/app/components/custom/{$class}/{$class}.php";
-                $class_tag = "\\phoponent\\app\\component\\custom\\{$class}";
+                $class_tag = "\\phoponent\\app\\component\\custom\\$class";
                 /**
                  * @var xphp_tag $tag
                  */
-                $tag = new $class_tag(self::get_models($class), self::get_views($class), self::get_services(), $template);
+                $tag = new $class_tag(self::get_models($class), self::get_views($class), self::get_services($class_tag), $template);
                 foreach ($arguments as $argument => $valeur) {
                     if ($argument === 'value') {
                         $tag->value($valeur);
@@ -197,11 +199,11 @@ class xphp {
             }
             elseif (is_file("phoponent/app/components/core/{$class}/{$class}.php")) {
                 require_once "phoponent/app/components/core/{$class}/{$class}.php";
-                $class_tag = "\\phoponent\\app\\component\\core\\{$class}";
+                $class_tag = "\\phoponent\\app\\component\\core\\$class";
                 /**
                  * @var xphp_tag $tag
                  */
-                $tag = new $class_tag(self::get_models($class), self::get_views($class), self::get_services(), $template);
+                $tag = new $class_tag(self::get_models($class), self::get_views($class), self::get_services($class_tag), $template);
                 foreach ($arguments as $argument => $valeur) {
                     if ($argument === 'value') {
                         $tag->value($valeur);
@@ -220,20 +222,20 @@ class xphp {
 			if(is_file("phoponent/app/components/custom/{$class}/{$class}.php")) {
 				require_once "phoponent/app/components/core/{$class}/{$class}.php";
                 require_once "phoponent/app/components/custom/{$class}/{$class}.php";
-                $class_tag = "\\phoponent\\app\\component\\custom\\{$class}";
+                $class_tag = "\\phoponent\\app\\component\\custom\\$class";
 				/**
 				 * @var xphp_tag $tag
 				 */
-				$tag = new $class_tag(self::get_models($class), self::get_views($class), self::get_services(), $template);
+				$tag = new $class_tag(self::get_models($class), self::get_views($class), self::get_services($class_tag), $template);
 				$template = str_replace($matches[0], $tag->render(), $template);
 			}
 			elseif(is_file("phoponent/app/components/core/{$class}/{$class}.php")) {
                 require_once "phoponent/app/components/core/{$class}/{$class}.php";
-                $class_tag = "\\phoponent\\app\\component\\core\\{$class}";
+                $class_tag = "\\phoponent\\app\\component\\core\\$class";
                 /**
                  * @var xphp_tag $tag
                  */
-                $tag = new $class_tag(self::get_models($class), self::get_views($class), self::get_services(), $template);
+                $tag = new $class_tag(self::get_models($class), self::get_views($class), self::get_services($class_tag), $template);
                 $template = str_replace($matches[0], $tag->render(), $template);
             }
 		}, $template);
@@ -243,20 +245,20 @@ class xphp {
 			if(is_file("phoponent/app/components/custom/{$class}/{$class}.php")) {
 				require_once "phoponent/app/components/core/{$class}/{$class}.php";
                 require_once "phoponent/app/components/custom/{$class}/{$class}.php";
-                $class_tag = "\\phoponent\\app\\component\\custom\\{$class}";
+                $class_tag = "\\phoponent\\app\\component\\custom\\$class";
 				/**
 				 * @var xphp_tag $tag
 				 */
-				$tag = new $class_tag(self::get_models($class), self::get_views($class), self::get_services(), $template);
+				$tag = new $class_tag(self::get_models($class), self::get_views($class), self::get_services($class_tag), $template);
 				$template = str_replace($matches[0], $tag->render(), $template);
 			}
 			elseif(is_file("phoponent/app/components/core/{$class}/{$class}.php")) {
                 require_once "phoponent/app/components/core/{$class}/{$class}.php";
-                $class_tag = "\\phoponent\\app\\component\\core\\{$class}";
+                $class_tag = "\\phoponent\\app\\component\\core\\$class";
                 /**
                  * @var xphp_tag $tag
                  */
-                $tag = new $class_tag(self::get_models($class), self::get_views($class), self::get_services(), $template);
+                $tag = new $class_tag(self::get_models($class), self::get_views($class), self::get_services($class_tag), $template);
                 $template = str_replace($matches[0], $tag->render(), $template);
             }
 		}, $template);
@@ -288,11 +290,11 @@ class xphp {
             if(is_file("phoponent/app/components/custom/{$class}/{$class}.php")) {
                 require_once "phoponent/app/components/core/{$class}/{$class}.php";
                 require_once "phoponent/app/components/custom/{$class}/{$class}.php";
-                $class_tag = "\\phoponent\\app\\component\\custom\\{$class}";
+                $class_tag = "\\phoponent\\app\\component\\custom\\$class";
                 /**
                  * @var xphp_tag $tag
                  */
-                $tag = new $class_tag(self::get_models($class), self::get_views($class), self::get_services(), $template);
+                $tag = new $class_tag(self::get_models($class), self::get_views($class), self::get_services($class_tag), $template);
                 foreach ($arguments as $argument => $valeur) {
                     if ($argument === 'value') {
                         $tag->value($valeur);
@@ -304,11 +306,11 @@ class xphp {
             }
             elseif(is_file("phoponent/app/components/core/{$class}/{$class}.php")) {
                 require_once "phoponent/app/components/core/{$class}/{$class}.php";
-                $class_tag = "\\phoponent\\app\\component\\core\\{$class}";
+                $class_tag = "\\phoponent\\app\\component\\core\\class";
                 /**
                  * @var xphp_tag $tag
                  */
-                $tag = new $class_tag(self::get_models($class), self::get_views($class), self::get_services(), $template);
+                $tag = new $class_tag(self::get_models($class), self::get_views($class), self::get_services($class_tag), $template);
                 foreach ($arguments as $argument => $valeur) {
                     if ($argument === 'value') {
                         $tag->value($valeur);
@@ -327,20 +329,20 @@ class xphp {
 			if(is_file("phoponent/app/components/custom/{$class}/{$class}.php")) {
 				require_once "phoponent/app/components/core/{$class}/{$class}.php";
                 require_once "phoponent/app/components/custom/{$class}/{$class}.php";
-                $class_tag = "\\phoponent\\app\\component\\custom\\{$class}";
+                $class_tag = "\\phoponent\\app\\component\\custom\\$class";
 				/**
 				 * @var xphp_tag $tag
 				 */
-				$tag = new $class_tag(self::get_models($class), self::get_views($class), self::get_services(), $template);
+				$tag = new $class_tag(self::get_models($class), self::get_views($class), self::get_services($class_tag), $template);
 				$template = str_replace($matches[0], $tag->render(), $template);
 			}
 			elseif(is_file("phoponent/app/components/core/{$class}/{$class}.php")) {
                 require_once "phoponent/app/components/core/{$class}/{$class}.php";
-                $class_tag = "\\phoponent\\app\\component\\core\\{$class}";
+                $class_tag = "\\phoponent\\app\\component\\core\\$class";
                 /**
                  * @var xphp_tag $tag
                  */
-                $tag = new $class_tag(self::get_models($class), self::get_views($class), self::get_services(), $template);
+                $tag = new $class_tag(self::get_models($class), self::get_views($class), self::get_services($class_tag), $template);
                 $template = str_replace($matches[0], $tag->render(), $template);
             }
 		}, $template);
@@ -350,20 +352,20 @@ class xphp {
 			if(is_file("phoponent/app/components/custom/{$class}/{$class}.php")) {
 				require_once "phoponent/app/components/core/{$class}/{$class}.php";
                 require_once "phoponent/app/components/custom/{$class}/{$class}.php";
-                $class_tag = "\\phoponent\\app\\component\\custom\\{$class}";
+                $class_tag = "\\phoponent\\app\\component\\custom\\$class";
 				/**
 				 * @var xphp_tag $tag
 				 */
-				$tag = new $class_tag(self::get_models($class), self::get_views($class), self::get_services(), $template);
+				$tag = new $class_tag(self::get_models($class), self::get_views($class), self::get_services($class_tag), $template);
 				$template = str_replace($matches[0], $tag->render(), $template);
 			}
 			elseif(is_file("phoponent/app/components/core/{$class}/{$class}.php")) {
                 require_once "phoponent/app/components/core/{$class}/{$class}.php";
-                $class_tag = "\\phoponent\\app\\component\\core\\{$class}";
+                $class_tag = "\\phoponent\\app\\component\\core\\$class";
                 /**
                  * @var xphp_tag $tag
                  */
-                $tag = new $class_tag(self::get_models($class), self::get_views($class), self::get_services(), $template);
+                $tag = new $class_tag(self::get_models($class), self::get_views($class), self::get_services($class_tag), $template);
                 $template = str_replace($matches[0], $tag->render(), $template);
             }
 		}, $template);
@@ -395,11 +397,11 @@ class xphp {
 			if(is_file("phoponent/app/components/custom/{$class}/{$class}.php")) {
 				require_once "phoponent/app/components/core/{$class}/{$class}.php";
                 require_once "phoponent/app/components/custom/{$class}/{$class}.php";
-                $class_tag = "\\phoponent\\app\\component\\custom\\{$class}";
+                $class_tag = "\\phoponent\\app\\component\\custom\\$class";
 				/**
 				 * @var xphp_tag $tag
 				 */
-				$tag = new $class_tag(self::get_models($class), self::get_views($class), self::get_services(), $template);
+				$tag = new $class_tag(self::get_models($class), self::get_views($class), self::get_services($class_tag), $template);
 				foreach ($arguments as $argument => $valeur) {
 					if ($argument === 'value') {
 					    $tag->value($valeur);
@@ -411,11 +413,11 @@ class xphp {
 			}
 			elseif(is_file("phoponent/app/components/core/{$class}/{$class}.php")) {
                 require_once "phoponent/app/components/core/{$class}/{$class}.php";
-                $class_tag = "\\phoponent\\app\\component\\core\\{$class}";
+                $class_tag = "\\phoponent\\app\\component\\core\\$class";
                 /**
                  * @var xphp_tag $tag
                  */
-                $tag = new $class_tag(self::get_models($class), self::get_views($class), self::get_services(), $template);
+                $tag = new $class_tag(self::get_models($class), self::get_views($class), self::get_services($class_tag), $template);
                 foreach ($arguments as $argument => $valeur) {
                     if ($argument === 'value') {
                         $tag->value($valeur);

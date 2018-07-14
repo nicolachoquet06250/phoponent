@@ -2,11 +2,21 @@
 namespace phoponent\app\component\custom;
 
     use Exception;
-	use phoponent\framework\service\translation;
+    use phoponent\framework\loading\Auto;
+    use phoponent\framework\service\translation;
 
 	class Table extends \phoponent\app\component\core\Table {
 
-		/**
+        public static function load_services()
+        {
+            $dependies = Auto::dependencie('services');
+            return [
+                'translation' => $dependies['translation'],
+                'json_reader' => $dependies['json_reader'],
+            ];
+        }
+
+        /**
 		 * @return string
 		 * @throws Exception
 		 */

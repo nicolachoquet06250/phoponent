@@ -5,7 +5,7 @@ trait model {
 	private $services = [];
 	private $component = '';
     public function __construct($services, string $component) {
-		$this->services = $services;
+        $this->services = $services;
 		$this->component = $component;
     }
 
