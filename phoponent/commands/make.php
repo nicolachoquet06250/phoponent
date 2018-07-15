@@ -1,6 +1,7 @@
 <?php
 namespace phoponent\framework\command;
 
+use phoponent\framework\static_classe\debug;
 use phoponent\framework\traits\command;
 
 class make {
@@ -42,7 +43,7 @@ use phoponent\\framework\\traits\\view;
 
         file_put_contents(
             "phoponent/app/components/{$type}/{$tag}/views/src/{$tag}.view.html",
-            "<div> @class@ </div>"
+            $type === 'core' ? "<div> @class@ </div>" : '@parent@'
         );
 
         file_put_contents(
@@ -74,4 +75,8 @@ use phoponent\\framework\\traits\\model;
             }
 		}
 	}
+
+	public function debug() {
+        debug::set_debug();
+    }
 }

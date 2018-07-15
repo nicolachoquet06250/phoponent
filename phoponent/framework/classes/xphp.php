@@ -43,7 +43,9 @@ class xphp {
                     require_once "phoponent/app/components/custom/{$component}/views/{$file}";
                     $view = str_replace('.view.php', '', $file);
                     $view_class = "\\phoponent\\app\\component\\custom\\$component\\mvc\\view\\$view";
+                    $view_parent_class = "\\phoponent\\app\\component\\core\\$component\\mvc\\view\\$view";
                     $views[$view] = new $view_class("phoponent/app/components/custom/{$component}/views");
+                    $views[$view]->set_parent(new $view_parent_class("phoponent/app/components/core/{$component}/views"));
                 }
                 elseif(is_file("phoponent/app/components/core/{$component}/views/{$file}")) {
                     require_once "phoponent/app/components/core/{$component}/views/{$file}";

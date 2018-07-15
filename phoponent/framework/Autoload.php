@@ -2,11 +2,22 @@
 namespace phoponent\framework\loading;
 
 
+use phoponent\framework\static_classe\debug;
+
 class Auto {
     protected static $dependencies = [];
 
+    private static function debug_page() {
+        ini_set('display_errors', 'off');
+        if(debug::get_debug()) {
+            ini_set('display_errors', 'on');
+        }
+    }
+
 	public static function load() {
 		require_once 'traits/static_class.php';
+        require_once 'classes/debug.php';
+        self::debug_page();
 		require_once 'traits/view.php';
 		require_once 'traits/model.php';
 		require_once 'traits/service.php';
@@ -15,6 +26,8 @@ class Auto {
 		require_once 'classes/xphp.php';
 		require_once 'classes/xphp_tag.php';
 		require_once 'classes/command.php';
+
+		require_once 'classes/index.php';
 	}
 
 	public static function dependencies() {

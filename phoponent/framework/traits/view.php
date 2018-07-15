@@ -6,6 +6,7 @@ use phoponent\framework\static_classe\xphp;
 trait view {
     private $template = '';
     protected $vars = [];
+    protected $component = '';
 
     public function __construct($path) {
     	$view_name = explode('\\', get_class($this))[count(explode('\\', get_class($this)))-1];
@@ -14,8 +15,16 @@ trait view {
         }
     }
 
+    public function set_parent($parent_class) {
+        if(strstr(__CLASS__, 'custom')) {
+            $this->set_vars(['parent' => $parent_class->get_template()]);
+        }
+    }
+
     public function set_vars($vars) {
-        $this->vars = $vars;
+        foreach ($vars as $var => $value) {
+            $this->vars[$var] = $value;
+        }
         return $this;
     }
 
