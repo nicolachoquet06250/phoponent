@@ -2,7 +2,7 @@
     "name": "nicolas/phoponent",
     "description": "Framework PHP permétant de créer des composant HTML en PHP. chaque composant est un pattern MVC et sa vue peux comptenir d'autres composants.",
     "type": "project",
-    "license": "GNU GPL",
+    "license": "GPL-3.0-only",
     "authors": [
         {
             "name": "Nicolas Choquet",
