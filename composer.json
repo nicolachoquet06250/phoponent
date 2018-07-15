@@ -1,0 +1,13 @@
+{
+    "name": "nicolas/phoponent",
+    "description": "Framework PHP permétant de créer des composant HTML en PHP. chaque composant est un pattern MVC et sa vue peux comptenir d'autres composants.",
+    "type": "project",
+    "license": "GNU GPL",
+    "authors": [
+        {
+            "name": "Nicolas Choquet",
+            "email": "nicolachoquet06250@gmail.com"
+        }
+    ],
+    "require": {}
+}
