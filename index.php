@@ -1,6 +1,12 @@
 <?php
 
-//ini_set('display_errors', 'on');
+/**
+ * © 2018 - Phoponent
+ * Author: Nicolas Choquet
+ * Email: nicolachoquet06250@gmail.com
+ * LICENSE GPL ( GNU General Public License )
+ */
+
 require_once 'phoponent/Autoload.php';
 \phoponent\loading\Auto::load();
 

@@ -1,4 +1,12 @@
 <?php
+
+/**
+ * © 2018 - Phoponent
+ * Author: Nicolas Choquet
+ * Email: nicolachoquet06250@gmail.com
+ * LICENSE GPL ( GNU General Public License )
+ */
+
 namespace phoponent\framework\service;
 
 use phoponent\framework\traits\service;
@@ -10,13 +18,13 @@ class translation {
 	use service;
 	private static $base_url = 'http://translate.google.cn/translate_a/single';
 
-	/**
-	 * @param string|array $text
-	 * @param array        $array
-	 * @param string       $lang
-	 * @return string|array
-	 * @throws Exception
-	 */
+    /**
+     * @param string|array $text
+     * @param array $array
+     * @param string $lang
+     * @return string|array
+     * @throws \Exception
+     */
 	public static function __($text, $array = [], $lang = 'en') {
 		$translate_object = new TranslateClient();
 		$translate_object->setUrlBase(self::$base_url);

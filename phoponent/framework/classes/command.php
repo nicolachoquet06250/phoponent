@@ -1,4 +1,12 @@
 <?php
+
+/**
+ * © 2018 - Phoponent
+ * Author: Nicolas Choquet
+ * Email: nicolachoquet06250@gmail.com
+ * LICENSE GPL ( GNU General Public License )
+ */
+
 namespace phoponent\framework\static_classe;
 
 use Exception;
@@ -37,7 +45,7 @@ class command {
 		}
 		$command = explode(':', $argv[0]);
 		$command_class = $command[0];
-		$command_method = $command[1];
+		$command_method = isset($command[1]) ? $command[1] : null;
 		$argv = self::clean_argv($argv);
 		if(is_file("phoponent/commands/{$command_class}.php")) {
 			require_once "phoponent/commands/{$command_class}.php";
@@ -47,6 +55,11 @@ class command {
 		}
 		$command_class = "\\phoponent\\framework\\command\\{$command_class}";
 		$command_obj = new $command_class($argv);
-		$command_obj->execute($command_method);
+		if($command_method) {
+            $command_obj->execute($command_method);
+        }
+        else {
+            $command_obj->execute();
+        }
 	}
 }

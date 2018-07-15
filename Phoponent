@@ -1,6 +1,13 @@
 #!/usr/bin/env php
 <?php
 
+/**
+ * © 2018 - Phoponent
+ * Author: Nicolas Choquet
+ * Email: nicolachoquet06250@gmail.com
+ * LICENSE GPL ( GNU General Public License )
+ */
+
 require "phoponent/Autoload.php";
 	\phoponent\loading\Auto::load();
 	try {

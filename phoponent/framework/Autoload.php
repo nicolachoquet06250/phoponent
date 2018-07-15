@@ -1,4 +1,12 @@
 <?php
+
+/**
+ * © 2018 - Phoponent
+ * Author: Nicolas Choquet
+ * Email: nicolachoquet06250@gmail.com
+ * LICENSE GPL ( GNU General Public License )
+ */
+
 namespace phoponent\framework\loading;
 
 
