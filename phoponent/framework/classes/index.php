@@ -6,7 +6,7 @@
  * Email: nicolachoquet06250@gmail.com
  * LICENSE GPL ( GNU General Public License )
  */
-
+    namespace phoponent;
     use phoponent\framework\traits\static_class;
     use phoponent\framework\static_classe\xphp;
 

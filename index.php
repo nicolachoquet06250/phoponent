@@ -7,7 +7,8 @@
  * LICENSE GPL ( GNU General Public License )
  */
 
+namespace phoponent;
 require_once 'phoponent/Autoload.php';
-\phoponent\loading\Auto::load();
+loading\Auto::load();
 
 echo index::start(!isset($argv) ? [1 => $_GET['p']] : $argv);

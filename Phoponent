@@ -8,11 +8,12 @@
  * LICENSE GPL ( GNU General Public License )
  */
 
+namespace phoponent;
 require "phoponent/Autoload.php";
-	\phoponent\loading\Auto::load();
+	loading\Auto::load();
 	try {
-        \phoponent\framework\static_classe\command::go($argv);
+        framework\static_classe\command::go($argv);
 	}
-	catch (Exception $e) {
+	catch (\Exception $e) {
 		exit($e->getMessage()."\n");
 	}
